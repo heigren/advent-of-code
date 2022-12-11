@@ -3,26 +3,59 @@ with open('input/10.txt') as f:
 
 cpu = 0
 x = 1
-i = 0
-cycles = []
-
-
-def check(cpu: int, x: int) -> None:
-    if cpu in [20, 60, 100, 140, 180, 220]: cycles.append(cpu * x)
-
+cycles = 0
 
 for op in data:
     match op[0]:
         case 'noop':
             cpu += 1
-            check(cpu, x)
+            if (- 20 + cpu) % 40 == 0: cycles += (cpu * x)
 
         case 'addx':
             cpu += 1
-            check(cpu, x)
+            if (- 20 + cpu) % 40 == 0: cycles += (cpu * x)
             
             cpu += 1
-            check(cpu, x)
+            if (- 20 + cpu) % 40 == 0: cycles += (cpu * x)
             x += int(op[1])
 
-print(f'-> Part 1: {sum(cycles)}')
+print(f'-> Part 1: {cycles}')
+
+# -----------
+
+crt = [[] for x in range(6)]
+cycle = 0
+addx = 1
+pos = 0
+crt_row = 0
+
+def add_pixel(addx, pos, crt, crt_row):
+    if (addx == pos) or (addx - 1 == pos) or (addx + 1 == pos):
+        crt[crt_row].append('#')
+    else:
+        crt[crt_row].append('.')
+
+for op in data:
+    match op[0]:
+        case 'noop':
+            cycle += 1
+            add_pixel(addx, pos, crt, crt_row)
+            pos += 1
+            if pos > 39: crt_row += 1; pos = 0
+            
+
+        case 'addx':
+            cycle += 1
+            add_pixel(addx, pos, crt, crt_row)
+            pos += 1
+            if pos > 39: crt_row += 1; pos = 0
+
+            cycle += 1
+            add_pixel(addx, pos, crt, crt_row)
+            pos += 1
+            if pos > 39: crt_row += 1; pos = 0
+            
+            addx += int(op[1])
+            
+for row in crt:
+    print(''.join(row))
