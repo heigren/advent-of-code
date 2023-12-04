@@ -8,11 +8,17 @@ with open('input/4.txt') as f:
 start_p1 = time.time()
 
 sum_points = 0
+my_cards = {}
 
 for card in data:
     winning = set([x for x in card.split(':')[1].split('|')[0].strip().split(' ') if x])
     my_numbers = set([x for x in card.split(':')[1].split('|')[1].strip().split(' ') if x])
     matches = my_numbers.intersection(winning)
+
+    my_cards.update({data.index(card): {
+        'card': my_numbers,
+        'count': 1
+    }})
 
     if len(matches) <= 1:
         sum_points += len(matches)
@@ -29,30 +35,20 @@ print(f'Finished, part 1 -- {time_p1}')
 
 start_p2 = time.time()
 
-my_cards = {
-    k: v
-    for k, v
-    in zip(range(1,len(data)+1), [
-        [set([x for x in data[y-1].split(':')[1].split('|')[1].strip().split(' ') if x])]
-        for y
-        in range(1,len(data)+1)])
-    }
-
-
 i = 0
 while i < len(my_cards):
-    #print(f'{i=} {len(my_cards)=}')
     winning = set([x for x in data[i].split(':')[1].split('|')[0].strip().split(' ') if x])
+    new_match = my_cards[i]['card'].intersection(winning)
 
-    for cards in my_cards[i+1]:
-        new_match = cards.intersection(winning)
-
-        for y in range(i+2,len(new_match)+2+i):
-            my_cards[y].append(set([x for x in data[y-1].split(':')[1].split('|')[1].strip().split(' ') if x]))
-            pass
+    for x in range(0, my_cards[i]['count']):
+        for y in range(i+1, len(new_match)+1+i):
+            my_cards[y]['count'] = my_cards[y].get('count')+1
     i+=1
 
-total_value = sum([len(x) for x in my_cards.values()])
-print(total_value)
+s = 0
+for x in range(0,len(my_cards)):
+    s += my_cards[x]['count']
+
+print(s)
 time_p2 = (time.time() - start_p2)
 print(f'Finished, part 2 -- {time_p2}')
