@@ -45,9 +45,7 @@ while i < len(my_cards):
             my_cards[y]['count'] = my_cards[y].get('count')+1
     i+=1
 
-s = 0
-for x in range(0,len(my_cards)):
-    s += my_cards[x]['count']
+s = sum([x['count'] for x in my_cards.values()])
 
 print(s)
 time_p2 = (time.time() - start_p2)
