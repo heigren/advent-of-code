@@ -1,10 +1,7 @@
 import itertools
 
 with open('input/1.txt') as f:
-    data = [x.strip('\n').split('   ') for x in f.readlines()]
-    data = list(itertools.chain.from_iterable(data))
-    data = [int(x) for x in data]
-
+    data = [int(x) for x in list(itertools.chain.from_iterable([x.strip('\n').split('   ') for x in f.readlines()]))]
 
 l1 = list(sorted(data[::2]))
 l2 = list(sorted(data[::-2]))
