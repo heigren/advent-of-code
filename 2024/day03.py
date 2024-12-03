@@ -19,8 +19,7 @@ print(f'Part 2: {sum([x * y for x, y in find_mul(matches)])}')
 
 # -----
 
-segments1 = [re.split(r"(do\(\)|don't\(\))", line) for line in data]
-segments = [x for y in segments1 for x in y]
+segments = [x for y in [re.split(r"(do\(\)|don't\(\))", line) for line in data] for x in y]
 
 is_matching = True
 new_matches = []
